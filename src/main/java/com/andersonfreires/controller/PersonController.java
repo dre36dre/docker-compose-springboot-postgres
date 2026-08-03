@@ -1,9 +1,11 @@
 package com.andersonfreires.controller;
 
+import com.andersonfreires.DockerpostgresApplication;
 import com.andersonfreires.entity.Person;
-import com.andersonfreires.repository.PersonRepository;
+import com.andersonfreires.service.PersonService;
 
 import org.springframework.http.ResponseEntity;
+//import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,44 +14,38 @@ import java.util.List;
 @RequestMapping("/people")
 public class PersonController {
 
-    private final PersonRepository repository;
+    private final DockerpostgresApplication dockerpostgresApplication;
 
-    public PersonController(PersonRepository repository) {
-        this.repository = repository;
+    private final PersonService service ;
+
+    public PersonController(PersonService service, DockerpostgresApplication dockerpostgresApplication) {
+        this.service=service;
+        this.dockerpostgresApplication = dockerpostgresApplication;
     }
 
     @GetMapping
     public List<Person> listAll() {
-        return repository.findAll() ;
+        return service.findAll() ;
     }
     
-    @PostMapping
-    public Person create(@RequestBody Person person) {
-    	return repository.save(person);
-    }
-    
-    @PutMapping(value="/{id}")
-    public ResponseEntity<Person> update(@PathVariable Long id,@RequestBody Person obj) {
-    	Person person=repository.findById(id).orElseThrow();
-    	
-    	person.setName(obj.getName());
-    	person.setAge(obj.getAge());
-    	person.setCity(obj.getCity());
-    	
-    	person=repository.save(person);
-    	
-    	return ResponseEntity.ok().body(person);
-    }
-    
-    
-    @DeleteMapping(value="/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-    	repository.deleteById(id);
-    	return ResponseEntity.noContent().build();    	
-    }
-    
-    
-    
+  @PostMapping
+  public Person insert(@RequestBody Person person) {
+	  return service.insert(person);
+  }
+  
+  @PutMapping("/{id}")
+  public ResponseEntity<Person> update(@PathVariable Long id,@RequestBody Person person) {
+	  Person updatePerson=service.update(id, person);
+	  
+	  return ResponseEntity.ok().body(updatePerson);
+  }
+  
+  @DeleteMapping("/{id}") 
+  public ResponseEntity<Void> delete(@PathVariable Long id){
+	  service.delete(id);
+	  
+	  return ResponseEntity.noContent().build();
+			  }
     
     
 }
