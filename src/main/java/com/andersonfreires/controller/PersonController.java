@@ -2,6 +2,7 @@ package com.andersonfreires.controller;
 
 import com.andersonfreires.DockerpostgresApplication;
 import com.andersonfreires.entity.Person;
+import com.andersonfreires.repository.PersonRepository;
 import com.andersonfreires.service.PersonService;
 
 import org.springframework.http.ResponseEntity;
@@ -14,11 +15,12 @@ import java.util.List;
 @RequestMapping("/people")
 public class PersonController {
 
+
     private final DockerpostgresApplication dockerpostgresApplication;
 
     private final PersonService service ;
 
-    public PersonController(PersonService service, DockerpostgresApplication dockerpostgresApplication) {
+    public PersonController(PersonService service, DockerpostgresApplication dockerpostgresApplication, PersonRepository personRepository) {
         this.service=service;
         this.dockerpostgresApplication = dockerpostgresApplication;
     }
@@ -27,6 +29,12 @@ public class PersonController {
     public List<Person> listAll() {
         return service.findAll() ;
     }
+    
+    @GetMapping("/{id}")
+    public Person findById(@PathVariable Long id) {
+    	return service.findById(id);
+    }
+    
     
   @PostMapping
   public Person insert(@RequestBody Person person) {

@@ -22,6 +22,11 @@ public class PersonService {
 		return repository.findAll();
 	}
 	
+	public Person findById(Long id) {
+		return  repository.findById(id)
+				.orElse(null);
+	}
+	
 	public Person insert(Person person) {
 		return repository.save(person);
 	}
