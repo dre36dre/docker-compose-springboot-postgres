@@ -1,12 +1,10 @@
 package com.andersonfreires.controller;
 
-import com.andersonfreires.DockerpostgresApplication;
 import com.andersonfreires.entity.Person;
 import com.andersonfreires.repository.PersonRepository;
 import com.andersonfreires.service.PersonService;
 
 import org.springframework.http.ResponseEntity;
-//import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,13 +14,11 @@ import java.util.List;
 public class PersonController {
 
 
-    private final DockerpostgresApplication dockerpostgresApplication;
 
     private final PersonService service ;
 
-    public PersonController(PersonService service, DockerpostgresApplication dockerpostgresApplication, PersonRepository personRepository) {
+    public PersonController(PersonService service,  PersonRepository personRepository) {
         this.service=service;
-        this.dockerpostgresApplication = dockerpostgresApplication;
     }
 
     @GetMapping

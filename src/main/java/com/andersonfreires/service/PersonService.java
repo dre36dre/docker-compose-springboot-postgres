@@ -2,7 +2,9 @@ package com.andersonfreires.service;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.andersonfreires.entity.Person;
 import com.andersonfreires.repository.PersonRepository;
@@ -24,7 +26,11 @@ public class PersonService {
 	
 	public Person findById(Long id) {
 		return  repository.findById(id)
-				.orElse(null);
+				.orElseThrow(()  ->
+				new ResponseStatusException(
+					HttpStatus.NOT_FOUND,
+					"Person not found with id: "+id)
+						);
 	}
 	
 	public Person insert(Person person) {
