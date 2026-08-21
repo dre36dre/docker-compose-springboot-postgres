@@ -1,7 +1,6 @@
 package com.andersonfreires.controller;
 
 import com.andersonfreires.entity.Person;
-import com.andersonfreires.repository.PersonRepository;
 import com.andersonfreires.service.PersonService;
 
 import org.springframework.http.ResponseEntity;
@@ -13,43 +12,47 @@ import java.util.List;
 @RequestMapping("/people")
 public class PersonController {
 
+    private final PersonService service;
 
-
-    private final PersonService service ;
-
-    public PersonController(PersonService service,  PersonRepository personRepository) {
-        this.service=service;
+    public PersonController(PersonService service) {
+        this.service = service;
     }
 
+    // GET /people -> lista todas as pessoas
     @GetMapping
     public List<Person> listAll() {
-        return service.findAll() ;
+        return service.findAll();
     }
-    
-    @GetMapping("/{id}")
-    public Person findById(@PathVariable Long id) {
-    	return service.findById(id);
+
+    // GET /people/hello -> endpoint de teste/saudação
+    @GetMapping("/hello")
+    public String hello() {
+        return "Hello from People API v1.1!";
     }
-    
-    
-  @PostMapping
-  public Person insert(@RequestBody Person person) {
-	  return service.insert(person);
-  }
-  
-  @PutMapping("/{id}")
-  public ResponseEntity<Person> update(@PathVariable Long id,@RequestBody Person person) {
-	  Person updatePerson=service.update(id, person);
-	  
-	  return ResponseEntity.ok().body(updatePerson);
-  }
-  
-  @DeleteMapping("/{id}") 
-  public ResponseEntity<Void> delete(@PathVariable Long id){
-	  service.delete(id);
-	  
-	  return ResponseEntity.noContent().build();
-			  }
-    
-  
+
+    // GET /people/{id} -> busca pessoa por ID numérico
+    //@GetMapping("/{id}")
+   // public Person findById(@PathVariable Long id) {
+     //   return service.findById(id);
+   // }
+
+    // POST /people -> insere nova pessoa
+    @PostMapping
+    public Person insert(@RequestBody Person person) {
+        return service.insert(person);
+    }
+
+    // PUT /people/{id} -> atualiza pessoa existente
+    @PutMapping("/{id}")
+    public ResponseEntity<Person> update(@PathVariable Long id, @RequestBody Person person) {
+        Person updatePerson = service.update(id, person);
+        return ResponseEntity.ok().body(updatePerson);
+    }
+
+    // DELETE /people/{id} -> remove pessoa
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
